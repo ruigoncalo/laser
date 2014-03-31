@@ -8,9 +8,49 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MainActivity" >
 
-    <TextView
+    <Button
+        android:id="@+id/startButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/hello_world" />
+        android:layout_marginTop="17dp"
+        android:text="@string/start" />
+
+    <Button
+        android:id="@+id/stopButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/startButton"
+        android:layout_alignBottom="@+id/startButton"
+        android:layout_marginLeft="24dp"
+        android:layout_toRightOf="@+id/startButton"
+        android:text="@string/stop" />
+
+    <TextView
+        android:id="@+id/x_axis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/startButton"
+        android:layout_below="@+id/startButton"
+        android:layout_marginTop="30dp"
+        android:text="@string/default_value"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/y_axis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/x_axis"
+        android:layout_below="@+id/x_axis"
+        android:text="@string/default_value"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/z_axis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/y_axis"
+        android:layout_below="@+id/y_axis"
+        android:text="@string/default_value"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
