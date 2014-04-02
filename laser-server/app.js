@@ -1,7 +1,7 @@
 var express = require('express');
 var http = require('http');
 var path = require('path');
-var io = require('socket.io').listen(12345);
+var io = require('socket.io').listen(33001);
 var routes = require('./routes');
 
 var app = express();
