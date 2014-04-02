@@ -1,4 +1,4 @@
-Glaser
+Laser
 ===
 
 Simulate laser pointer using Android, Node.js and socket.io
