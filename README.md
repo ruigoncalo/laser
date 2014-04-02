@@ -19,11 +19,13 @@ Install server dependencies:
 ```bash
 cd laser-server/
 npm install
+```
 
 Get server running
 
 ```bash
 node app.js
+```
 
 Server should be running on port 33001 (localhost)
 
@@ -31,7 +33,7 @@ Test on browser:
 
 ```bash
 http://localhost:33001
-
+```
 ===
 
 ### Android app
@@ -45,4 +47,5 @@ Install the apk using adb:
 ```bash
 cd <android_sdk_folder>/platform-tools/
 ./adb install /Laser/Laser.apk
+```
 
