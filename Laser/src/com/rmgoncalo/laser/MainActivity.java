@@ -125,6 +125,8 @@ public class MainActivity extends Activity implements SensorEventListener,
 	 * 'alpha' and 'gravity' variables are used to implement a low-pass filter
 	 * (http://developer.android.com/guide/topics/sensors/sensors_motion.html)
 	 */
+	
+	// TODO: convert these values into coherent coordinates to send to the remove server
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 
@@ -266,6 +268,7 @@ public class MainActivity extends Activity implements SensorEventListener,
 					.show();
 			break;
 
+			// TODO: disconnect the socket
 		case R.id.stopButton:
 			btnStart.setEnabled(true);
 			btnStop.setEnabled(false);
