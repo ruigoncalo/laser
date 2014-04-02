@@ -1,7 +1,7 @@
 var pointer = angular.module('pointer', []);
 
 pointer.factory('socket', function ($rootScope) {
-  var socket = io.connect(window.location.protocol + "//" + window.location.hostname  + ":12345");
+  var socket = io.connect(window.location.protocol + "//" + window.location.hostname  + ":33001");
   return {
     on: function (eventName, callback) {
       socket.on(eventName, function () {
