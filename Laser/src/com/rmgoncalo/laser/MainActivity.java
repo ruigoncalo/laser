@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SeekBar;
@@ -90,6 +91,7 @@ public class MainActivity extends Activity implements SensorEventListener,
 	 */
 	@Override
 	protected void onResume() {
+		Log.d(tag, "onResume");
 		super.onResume();
 		if (started) {
 			super.onResume();
@@ -103,6 +105,7 @@ public class MainActivity extends Activity implements SensorEventListener,
 	 */
 	@Override
 	protected void onPause() {
+		Log.d(tag, "onPause");
 		super.onPause();
 		if (started) {
 			mSensorManager.unregisterListener(this);
@@ -110,8 +113,16 @@ public class MainActivity extends Activity implements SensorEventListener,
 	}
 
 	/*
-	 * when start button is clicked, sensor sends values x y z alpha and gravity
-	 * variables are used to implement a low-pass filter
+	 * Interface SensorEventListener methods:
+	 * 
+	 * onSensorChanged onAccuracyChanged
+	 * 
+	 * Sensor
+	 */
+	
+	/*
+	 * when 'start' button is clicked, sensor sends values 'x y z' 
+	 * 'alpha' and 'gravity' variables are used to implement a low-pass filter
 	 * (http://developer.android.com/guide/topics/sensors/sensors_motion.html)
 	 */
 	@Override
@@ -132,6 +143,7 @@ public class MainActivity extends Activity implements SensorEventListener,
 			// count++;
 			// Log.d(tag, "count: " + count);
 
+			// use count to decrease frequency of points being sent
 			// if (count % 3 == 0) {
 
 			xAxis.setText(String.valueOf(x));
@@ -153,25 +165,55 @@ public class MainActivity extends Activity implements SensorEventListener,
 
 	}
 
+	/*
+	 * Interface OnSeekBarChangeListener methods:
+	 * 
+	 * onProgressChanged onStartTrackingTouch onStopTrackingTouch
+	 * 
+	 * SeekBar
+	 */
+
+	// update speed value [0-20]
+	// max value (20) is defined on activity_main.xml (android:max="20")
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress,
 			boolean fromTouch) {
 		speed = progress;
-		Log.d(tag, "speed: " + progress);
+		// Log.d(tag, "speed: " + progress);
 	}
 
 	@Override
 	public void onStartTrackingTouch(SeekBar seekBar) {
-		Log.d(tag, "onStartTrackingTouch");
+		// Log.d(tag, "onStartTrackingTouch");
 	}
 
 	@Override
 	public void onStopTrackingTouch(SeekBar seekBar) {
-		Log.d(tag, speed + "/" + seekBar.getMax());
+		// Log.d(tag, speed + "/" + seekBar.getMax());
 		Toast.makeText(this, speed + "/" + seekBar.getMax(), Toast.LENGTH_SHORT)
 				.show();
 	}
 
+	// after click 'start' button, hide keyboard
+	private void hideKeyboard(){
+		InputMethodManager inputManager = (InputMethodManager)
+                getSystemService(Context.INPUT_METHOD_SERVICE); 
+
+		inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                   InputMethodManager.HIDE_NOT_ALWAYS);
+	}
+	
+	/*
+	 * Interface OnClickListener methods:
+	 * 
+	 * onClick
+	 * 
+	 * Button
+	 * 
+	 * use switch to distinguish between 'start' and 'stop' buttons
+	 * 
+	 */
+	
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -189,7 +231,7 @@ public class MainActivity extends Activity implements SensorEventListener,
 				break;
 			}
 
-			// TODO: Check if ip and port are correct values
+			// TODO: Check if ip and port are correct strings
 			String ip = ipText.getText().toString();
 			String port = portText.getText().toString();
 
@@ -199,23 +241,29 @@ public class MainActivity extends Activity implements SensorEventListener,
 
 			// connect socket client
 			// TODO: use worker thread to run socket client
+			// and handle UI updates with Handler
 			connection = new Connection(ip_final, port);
 			try {
 				connection.init();
 			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 
+			hideKeyboard();
+			
 			btnStart.setEnabled(false);
 			btnStop.setEnabled(true);
 			speedBar.setEnabled(false);
 			started = true;
+			
 			mSensorManager.registerListener(this, mAccelerometer,
 					SensorManager.SENSOR_DELAY_NORMAL);
 
-			Toast.makeText(this, "Sending data to " + ip_final + ":" + port,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(
+					this,
+					"Sending data to " + ip_final + ":" + port
+							+ " with speed of " + speed, Toast.LENGTH_SHORT)
+					.show();
 			break;
 
 		case R.id.stopButton:
