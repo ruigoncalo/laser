@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no">
+    <title>Pointer</title>
+    <!-- because express 3 does not support layout -->
+    <script src="/javascripts/vendor/socket.io.min.js"></script>
+    <script src="/javascripts/vendor/angular.min.js"></script>
+    <script src="/javascripts/vendor/jquery-1.11.0.min.js"></script>
+    <script src="/javascripts/vendor/bootstrap.min.js"></script>
+    <script src="/javascripts/pointer.js"></script>
+    <style type="text/css">
+      @import url("/stylesheets/vendor/bootstrap.min.css");
+      @import url("/stylesheets/style.css");
+  </style>
+  <!-- end imports -->
+</head>
+
+<body>
+    <div ng-app="pointer">
+        <div ng-controller="ball">
+            {{coor}} {{width}} {{height}}
+            <div class="img-circle" style="margin-left:{{width}}px;margin-top:{{height}}px;width:{{size}}px; height:{{size}}px; background-color:black"></div>
+        </div>
+    </div>
+    <!-- debug -->
+    <script>
+        console.log($(window).height());
+        console.log($(window).width());
+    </script>
+    <!-- end debug -->
+</body>
+
+</html>
