@@ -48,7 +48,8 @@ public class Connection {
 
 	public void init() throws MalformedURLException {
 		socket = new SocketIO(ip + ":" + port);
-		 Log.d(tag, "ip:" + ip + ":port:" + port);
+		Log.d(tag, ip +":"+ port);
+		
 		socket.connect(new IOCallback() {
 
 			@Override
