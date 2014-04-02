@@ -1,3 +1,10 @@
+/*
+ * Socket.io
+ * 
+ * @Var: String ip
+ * @Var: String port
+ */
+
 package com.rmgoncalo.laser;
 
 import java.net.MalformedURLException;
@@ -16,6 +23,7 @@ public class Connection {
 	private final static String tag = "Laser-SocketIO";
 	private String ip;
 	private String port;
+	private SocketIO socket;
 
 	public Connection(String ip, String port) {
 		this.ip = ip;
@@ -38,9 +46,9 @@ public class Connection {
 		this.port = port;
 	}
 
-	public void sendPosition(JSONObject jObj) throws MalformedURLException {
-		SocketIO socket = new SocketIO(ip + ":" + port);
-		//Log.d(tag, "ip:" + ip + ":port:" + port);
+	public void init() throws MalformedURLException {
+		socket = new SocketIO(ip + ":" + port);
+		// Log.d(tag, "ip:" + ip + ":port:" + port);
 		socket.connect(new IOCallback() {
 
 			@Override
@@ -73,12 +81,25 @@ public class Connection {
 
 			@Override
 			public void on(String arg0, IOAcknowledge arg1, Object... arg2) {
-				if ("position".equals(arg0) && arg2.length > 0) {
-					//Log.d(tag, "" + arg2[0]);
-				}
+				// if ("position".equals(arg0) && arg2.length > 0) {
+				// Log.d(tag, "" + arg2[0]);
+				// }
 
 			}
 		});
+
+	}
+
+	/*
+	 * sends a point position using socket.io
+	 */
+	public void sendPosition(JSONObject jObj) {
+
+		if (socket == null) {
+			Log.d(tag, "Socket is null");
+			return;
+		}
+
 		socket.emit("echo", jObj);
 	}
 }

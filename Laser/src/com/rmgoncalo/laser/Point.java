@@ -1,6 +1,6 @@
 /*
- * Class that represents each coordinate point (x,y,z)
- * Method toJSON() translates the point into a JSON object
+ * Point Coordinates X Y Z
+ * Method toJSON() translates coordinates into a JSON object
  * 
  */
 
@@ -12,18 +12,18 @@ import org.json.JSONObject;
 import android.util.Log;
 
 public class Point {
-	
+
 	private final static String tag = "Laser-Point";
-	
+
 	// Strings used on the JSON object
 	private final static String XAXIS = "x";
 	private final static String YAXIS = "y";
 	private final static String ZAXIS = "z";
-	
+
 	private float x;
 	private float y;
 	private float z;
-	
+
 	// Constructor
 	public Point(float x, float y, float z) {
 		super();
@@ -33,7 +33,7 @@ public class Point {
 	}
 
 	// Getters and Setters
-	
+
 	public float getX() {
 		return x;
 	}
@@ -57,20 +57,26 @@ public class Point {
 	public void setZ(float z) {
 		this.z = z;
 	}
-	
-	// translating point object into JSON object
-	public JSONObject toJSON(){
+
+	/*
+	 * translating point object into JSON object 
+	 * { 
+	 *   x: value; 
+	 *   y: value; 
+	 *   z: value;
+	 * }
+	 */
+	public JSONObject toJSON() {
 		JSONObject jObj = new JSONObject();
-		
+
 		try {
 			jObj.put(XAXIS, String.valueOf(x));
 			jObj.put(YAXIS, String.valueOf(y));
 			jObj.put(ZAXIS, String.valueOf(z));
-		} catch(JSONException e){
+		} catch (JSONException e) {
 			e.printStackTrace();
 			Log.d(tag, "JSONException: " + e);
 		}
-		
 		return jObj;
 	}
 

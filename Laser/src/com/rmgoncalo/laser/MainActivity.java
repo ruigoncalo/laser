@@ -1,3 +1,11 @@
+/*
+ * Draws UI interface:
+ *   EditText: IP and Port
+ *   SeekBar: Mouse speed
+ *   Buttons: Start and Stop
+ *   TextViews: Coordinates X Y Z
+ */
+
 package com.rmgoncalo.laser;
 
 import java.net.MalformedURLException;
@@ -38,7 +46,7 @@ public class MainActivity extends Activity implements SensorEventListener,
 	private Sensor mAccelerometer;
 	private Connection connection;
 
-	private int count = 0;
+	// private int count = 0;
 	private final float alpha = (float) 0.8; // constant for our filter below
 	private float[] gravity = { 0, 0, 0 };
 
@@ -77,6 +85,9 @@ public class MainActivity extends Activity implements SensorEventListener,
 		return true;
 	}
 
+	/*
+	 * onResume register sensor
+	 */
 	@Override
 	protected void onResume() {
 		super.onResume();
@@ -87,6 +98,9 @@ public class MainActivity extends Activity implements SensorEventListener,
 		}
 	}
 
+	/*
+	 * onPause unregister sensor
+	 */
 	@Override
 	protected void onPause() {
 		super.onPause();
@@ -95,6 +109,11 @@ public class MainActivity extends Activity implements SensorEventListener,
 		}
 	}
 
+	/*
+	 * when start button is clicked, sensor sends values x y z alpha and gravity
+	 * variables are used to implement a low-pass filter
+	 * (http://developer.android.com/guide/topics/sensors/sensors_motion.html)
+	 */
 	@Override
 	public void onSensorChanged(SensorEvent event) {
 
@@ -122,13 +141,8 @@ public class MainActivity extends Activity implements SensorEventListener,
 			// Create new point
 			Point p = new Point(x, y, z);
 
-			// Send point to server
-			try {
-				connection.sendPosition(p.toJSON());
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			// send point to server
+			connection.sendPosition(p.toJSON());
 			// }
 		}
 
@@ -138,25 +152,26 @@ public class MainActivity extends Activity implements SensorEventListener,
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
 	}
-	
+
 	@Override
-    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromTouch) {
+	public void onProgressChanged(SeekBar seekBar, int progress,
+			boolean fromTouch) {
 		speed = progress;
 		Log.d(tag, "speed: " + progress);
-    }
+	}
 
-    @Override
-    public void onStartTrackingTouch(SeekBar seekBar) {
-    	Log.d(tag, "onStartTrackingTouch");
-    }
+	@Override
+	public void onStartTrackingTouch(SeekBar seekBar) {
+		Log.d(tag, "onStartTrackingTouch");
+	}
 
-    @Override
-    public void onStopTrackingTouch(SeekBar seekBar) {
-    	Log.d(tag, speed + "/" + seekBar.getMax());
-    	Toast.makeText(this, speed+"/"+seekBar.getMax(), Toast.LENGTH_SHORT).show();
-    }
-	
-	
+	@Override
+	public void onStopTrackingTouch(SeekBar seekBar) {
+		Log.d(tag, speed + "/" + seekBar.getMax());
+		Toast.makeText(this, speed + "/" + seekBar.getMax(), Toast.LENGTH_SHORT)
+				.show();
+	}
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -164,6 +179,12 @@ public class MainActivity extends Activity implements SensorEventListener,
 		case R.id.startButton:
 			if (ipText.length() == 0 || portText.length() == 0) {
 				Toast.makeText(this, "Insert IP and Port", Toast.LENGTH_SHORT)
+						.show();
+				break;
+			}
+
+			if (speed == 0) {
+				Toast.makeText(this, "Increase Mouse Speed", Toast.LENGTH_SHORT)
 						.show();
 				break;
 			}
@@ -176,7 +197,15 @@ public class MainActivity extends Activity implements SensorEventListener,
 			String ip_final = new StringBuilder(HTTP_PREFIX).append(ip)
 					.toString();
 
+			// connect socket client
+			// TODO: use worker thread to run socket client
 			connection = new Connection(ip_final, port);
+			try {
+				connection.init();
+			} catch (MalformedURLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
 			btnStart.setEnabled(false);
 			btnStop.setEnabled(true);
