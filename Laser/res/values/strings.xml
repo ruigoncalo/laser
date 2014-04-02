@@ -7,4 +7,12 @@
 	<string name="start">Start</string>
 	<string name="stop">Stop</string>
 	<string name="default_value">0</string>
+	<string name="text_hint_ip">Insert IP</string>
+	<string name="text_hint_port">Port</string>
+	<string name="ip">Local IP</string>
+	<string name="set_speed">Set Mouse Speed</string>
+	<string name="x_axis">X:</string>
+	<string name="y_axis">Y:</string>
+	<string name="z_axis">Z:</string>
+	<string name="json">JSONObject</string>
 </resources>

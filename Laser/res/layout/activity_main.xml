@@ -6,51 +6,149 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
+    android:keepScreenOn="true"
     tools:context=".MainActivity" >
 
-    <Button
-        android:id="@+id/startButton"
-        android:layout_width="wrap_content"
+    <EditText
+        android:id="@+id/ipEditText"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="17dp"
-        android:text="@string/start" />
+        android:layout_alignParentLeft="true"
+        android:layout_marginRight="10dp"
+        android:ems="10"
+        android:hint="@string/text_hint_ip" >
 
-    <Button
-        android:id="@+id/stopButton"
+        <requestFocus />
+    </EditText>
+
+    <EditText
+        android:id="@+id/portEditText"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:ems="10"
+        android:hint="@string/text_hint_port" >
+
+        <requestFocus />
+    </EditText>
+
+    <View
+        android:id="@+id/first_line"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ipEditText"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/speedTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/startButton"
-        android:layout_alignBottom="@+id/startButton"
-        android:layout_marginLeft="24dp"
-        android:layout_toRightOf="@+id/startButton"
-        android:text="@string/stop" />
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/first_line"
+        android:text="@string/set_speed" />
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/speedTextView"
+        android:max="20"
+        android:layout_centerHorizontal="true" />
+
+    <View
+        android:id="@+id/second_line"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/seekBar"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/darker_gray" />
+
+    <LinearLayout
+        android:id="@+id/buttonsLayout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/second_line"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/startButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/start" />
+
+        <Button
+            android:id="@+id/stopButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/stop" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/third_line"
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/buttonsLayout"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/x_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/third_line"
+        android:text="@string/x_axis" />
 
     <TextView
         android:id="@+id/x_axis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/startButton"
-        android:layout_below="@+id/startButton"
-        android:layout_marginTop="30dp"
-        android:text="@string/default_value"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_below="@+id/third_line"
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/x_title"
+        android:text="@string/default_value" />
+
+    <TextView
+        android:id="@+id/y_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/x_title"
+        android:text="@string/y_axis" />
 
     <TextView
         android:id="@+id/y_axis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/x_axis"
         android:layout_below="@+id/x_axis"
-        android:text="@string/default_value"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/y_title"
+        android:text="@string/default_value" />
+
+    <TextView
+        android:id="@+id/z_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/y_title"
+        android:text="@string/z_axis" />
 
     <TextView
         android:id="@+id/z_axis"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/y_axis"
         android:layout_below="@+id/y_axis"
-        android:text="@string/default_value"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:layout_marginLeft="10dp"
+        android:layout_toRightOf="@+id/z_title"
+        android:text="@string/default_value" />
 
 </RelativeLayout>
