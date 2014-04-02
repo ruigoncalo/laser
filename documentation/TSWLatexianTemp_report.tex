@@ -29,7 +29,7 @@
 
 
 \begin{abstract}
-This document describes the development process of a Laser Pointer.
+Some notes about the development of a Laser Pointer using Android, Node.js and socket.io.
 \end{abstract}
 
 %-----------------------------------------------------------------------
@@ -47,14 +47,21 @@ The Android app related files are store at the \texttt{Laser} folder in the root
 \end{figure}
 
 \autoref{fig:ui} shows the User Interface. The first elements are used to insert the IP address (xxx.xxx.xxx.xxx) and port of the remote server. Note that the port must be \textbf{33001}, because it is the one defined on the server. However, the port is introduced by an \textit{EditText} because if the server changes the port value, the app do not need to be changed.
+\\
 
-If the user do not fill in both \textit{EditText} boxes the sensor do not start running. The string values of each text are not being parsed in order to check if they are valid, but this feature is marked as future work.
+\noindent If the user do not fill in both \textit{EditText} boxes the sensor do not start running. The string values of each text are not being validated, but this feature is marked as future work.
+\\
 
-After inserting the remote address and port, the user must provide a mouse speed value using the \textit{SeekBar}. This element is defined to have a maximum value of 20, which means that the range is between 0 and 20. If the speed value is equal to 0, the sensor will not start running.
+\noindent After inserting the remote address and port, the user must provide a mouse speed value using the \textit{SeekBar}. This element is defined to have a maximum value of 20, which means that the range is between 0 and 20. If the speed value is equal to 0, the sensor will not start running.
+\\
 
-Below, there are two \textit{Buttons} that start and stop (pause) the sensor. This way, the user has a satisfactory control over the sensor, being able to start and stop it whenever he desires.
+\noindent Below, there are two \textit{Buttons} that start and stop (pause) the sensor. This way, the user has a satisfactory control over the sensor, being able to start and stop it whenever he desires.
+\\
 
-At last, the sensor values are displayed below the buttons as a debug feature. In fact, one of the major difficulties was to convert these values into coherent coordinates to send to the remote server.
+\noindent At last, the sensor values are displayed below the buttons as a debug feature. In fact, one of the major difficulties was to convert these values into coherent coordinates to send to the remote server.
+\\
+
+\noindent Since it is not functional to have the screen rotating while the device is moving, it was blocked the portrait orientation by adding \texttt{android:screenOrientation="portrait"} on the Manifest file.
 
 \subsection{Accelerometer Values}
 
@@ -67,9 +74,10 @@ In order to connect to the remote server, it was used the \texttt{socket.io-java
 %-----------------------------------------------------------------------
 \section{Server}
 
-It was used \textit{Node.js} to implement the server that would receive the Android app data. The files related to the server are placed at the \texttt{laser-server} folder in the root of the repository. These files were created using the \textit{Express} framework.
+It was used \textit{Node.js} to implement the server that receives the Android app data. The files related to the server are placed at the \texttt{laser-server} folder in the root of the repository. These files were created using the \textit{Express} framework.
+\\
 
-The main file is the \texttt{app.js} that implements the server. It uses the \texttt{socket.io} library to create a socket server that is listening on port \textbf{33001}. The following code snippet states the server behavior:
+\noindent The main file is the \texttt{app.js} that implements the server. It uses the \texttt{socket.io} library to create a socket server that is listening on port \textbf{33001}. The following code snippet states the server behavior:
 
 \begin{lstlisting}
 io.sockets.on('connection', function(socket) {
@@ -84,13 +92,14 @@ Whenever the socket receives a \texttt{connection} event it waits for the \textt
 %-----------------------------------------------------------------------
 \section{Client}
 
-The files related to the client are placed at the same folder as the server. The technology used to draw an HTML element in real-time was \textit{AngularJS}. The main files are \texttt{views/index.ejs} and \texttt{public/javascript/pointer.js}. The first file contains HTML elements to draw the container and the pointer (ball). The last file handles the socket connection in order to get the data sent by the Android app.
+The files related to the client are placed at the same folder as the server. The technology used to draw an HTML element in real-time was \textit{AngularJS}. The main files are \texttt{views/index.ejs} and \texttt{public/javascript/pointer.js}. The first file contains HTML elements to draw the container and the pointer. The last file handles the socket connection in order to get the data sent by the Android app.
+\\
 
-The pointer moves in the container by being constantly updated its \texttt{margin} values within the \texttt{style} attribute, as presented in the following code snippet:
+\noindent The pointer moves in the container by being constantly updated its \texttt{margin} values within the \texttt{style} attribute, as presented in the following code snippet:
 
 \begin{lstlisting}
 <div ng-app="pointer">
-  <div ng-controller="ball">
+  <div ng-controller="pointer">
     {{coor}} {{width}} {{height}}
      <div class="img-circle" 
          style="margin-left:{{width}}px; 
@@ -108,28 +117,39 @@ The \texttt{coor}, \texttt{width} and \texttt{height} variables are defined and 
 The following code snippet shows the function responsible for translating the Android app values into pointer movements on the HTML page:
 
 \begin{lstlisting}
-pointer.controller('ball', ['$scope','socket', function($scope, socket) {
+pointer.controller('pointerctrl', ['$scope','socket', function($scope, socket) {
     $scope.height =$(window).height()/2;
     $scope.width = $(window).width()/2;
     $scope.size = 20;
     socket.on('position', function (data) {
       $scope.coor = data;
 
-      var h_aux = $scope.height + (-parseFloat(data.y));
-      var w_aux = $scope.width + (-parseFloat(data.x));
+      $scope.height -= parseFloat(data.y);
+      $scope.width -= parseFloat(data.x);
 
-      if( h_aux < $(window).height() && h_aux > 0)
-        $scope.height+ = -parseFloat(data.y);
-      if( w_aux < $(window).width() && w_aux > 0)
-        $scope.width+ = -parseFloat(data.x);
+      var h_aux = $scope.height;
+      var w_aux = $scope.width;
 
-      //$scope.size + = parseFloat(data.z);
+      if( h_aux < 0)
+        $scope.height = 0;
+
+      if( h_aux > $(window).height())
+        $scope.height = $(window).height();
+
+      if( w_aux < 0)
+        $scope.width = 0;
+
+      if( w_aux > $(window).width())
+        $scope.width = $(window).width();
+
+      //$scope.size += parseFloat(data.z);
     });
 }]);
 \end{lstlisting}
 
-At first, the pointer is placed in the center of the page, by calculating the width and height of the window. It is defined a 20px size to the pointer. The Android app values are inspected using \texttt{data.x} and \texttt{data.y}. By parsing these values and multiplying by -1 it is possible to get a \textbf{very irregular} movement of the pointer that corresponds to the Android device's motion.
+At first, the pointer is placed in the center of the page, by calculating the width and height of the window. It is defined a 20px size to the pointer. The Android app values are inspected using \texttt{data.x} and \texttt{data.y}. By parsing these values and subtract the window's height and with by them it is possible to get a \textbf{very irregular} movement of the pointer that corresponds to the Android device's motion.
+\\
 
-In order to get the pointer inside the container, it is being checked the window's height and width so that the margin values cannot turn into negatives.
+\noindent In order to get the pointer inside the container, it is being checked the window's height and width so that the margin values cannot turn into negatives or greater than the window's borders.
 
 \end{document}
