@@ -1,5 +1,5 @@
-laser
-=====
+Glaser
+===
 
 Simulate laser pointer using Android, Node.js and socket.io
 
@@ -46,6 +46,6 @@ Install the apk using adb:
 
 ```bash
 cd <android_sdk_folder>/platform-tools/
-./adb install /Laser/Laser.apk
+./adb install <laser_folder>/Laser.apk
 ```
 
