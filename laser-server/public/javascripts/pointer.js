@@ -24,15 +24,18 @@ pointer.factory('socket', function ($rootScope) {
   };
 });
 
-pointer.controller('pointer', ['$scope','socket', function($scope, socket) {
+pointer.controller('pointerctrl', ['$scope','socket', function($scope, socket) {
     $scope.height =$(window).height()/2;
     $scope.width = $(window).width()/2;
     $scope.size = 20;
     socket.on('position', function (data) {
       $scope.coor = data;
 
-      var h_aux = $scope.height - parseFloat(data.y);
-      var w_aux = $scope.width - parseFloat(data.x);
+      $scope.height -= parseFloat(data.y);
+      $scope.width -= parseFloat(data.x);
+
+      var h_aux = $scope.height;
+      var w_aux = $scope.width;
 
       if( h_aux < 0)
         $scope.height = 0;
