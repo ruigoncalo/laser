@@ -1,3 +1,7 @@
+llncs*
+report.*
+*.bst
+*.sty
 *.aux
 *.glo
 *.idx
