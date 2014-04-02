@@ -12,29 +12,29 @@ Requirements:
 
 ===
 
-# Server
+### Server
 
 Install server dependencies:
 
-````bash
+```bash
 cd laser-server/
 npm install
 
 Get server running
 
-````bash
+```bash
 node app.js
 
 Server should be running on port 33001 (localhost)
 
 Test on browser:
 
-```
+```bash
 http://localhost:33001
 
 ===
 
-# Android app
+### Android app
 
 Install the Android SDK
 
