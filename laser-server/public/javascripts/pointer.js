@@ -31,13 +31,20 @@ pointer.controller('pointer', ['$scope','socket', function($scope, socket) {
     socket.on('position', function (data) {
       $scope.coor = data;
 
-      var h_aux = $scope.height+(-parseFloat(data.y));
-      var w_aux = $scope.width+(-parseFloat(data.x));
+      var h_aux = $scope.height - parseFloat(data.y);
+      var w_aux = $scope.width - parseFloat(data.x);
 
-      if( h_aux < $(window).height() && h_aux > 0)
-        $scope.height+=-parseFloat(data.y);
-      if( w_aux < $(window).width() && w_aux > 0)
-        $scope.width+=-parseFloat(data.x);
+      if( h_aux < 0)
+        $scope.height = 0;
+
+      if( h_aux > $(window).height())
+        $scope.height = $(window).height();
+
+      if( w_aux < 0)
+        $scope.width = 0;
+
+      if( w_aux > $(window).width())
+        $scope.width = $(window).width();
 
       //$scope.size += parseFloat(data.z);
     });
