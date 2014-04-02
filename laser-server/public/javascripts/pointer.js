@@ -24,7 +24,7 @@ pointer.factory('socket', function ($rootScope) {
   };
 });
 
-pointer.controller('pointerctrl', ['$scope','socket', function($scope, socket) {
+pointer.controller('pointer', ['$scope','socket', function($scope, socket) {
     $scope.height =$(window).height()/2;
     $scope.width = $(window).width()/2;
     $scope.size = 20;
